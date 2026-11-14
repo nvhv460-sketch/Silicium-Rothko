@@ -1,13 +1,16 @@
 #
 # Include from the Rodin platform DSC.
 #
-# [k70u 2026-11-04] The payload volume is located at run time, not by a fixed
-# offset: LK assembles the initrd envelope from the vendor ramdisk followed by
-# the init_boot ramdisk, and the stock vendor ramdisk is ~52 MiB of Android
-# payload, so the volume we want never starts at a stable offset.  A zero size
-# tells UniXNURamDiskDxe to scan for the FAT32 VBR and take the length from that
-# volume's own BPB.  Set both to non-zero to pin a slice explicitly instead.
+# [rodin 2026-11-14] Current UniXNUPkg (UniXNU main) no longer exports the
+# RamDisk offset/size PCDs this file used to set: UniXNURamDiskDxe locates the
+# payload volume at run time by scanning for the FAT32 VBR and taking the
+# length from that volume's own BPB.  The old PcdUniXNURamDiskOffset/Size
+# entries would now fail the DSC build with F001 ("Pcd ... not declared in DEC
+# files referenced in INF files in FDF"), so they are gone.
+#
+# The package's remaining PCDs (gUniXNUPkgTokenSpaceGuid.PcdUniXNUDebugLevel,
+# PcdUniXNUConfigPath, PcdUniXNUApplicationFile, PcdUniXNUDeviceModel) ship
+# their own defaults in UniXNUPkg.dec; override them here only if this board
+# needs something different.
 #
 [PcdsFixedAtBuild]
-  gUniXNUPkgTokenSpaceGuid.PcdUniXNURamDiskOffset|0x00000000
-  gUniXNUPkgTokenSpaceGuid.PcdUniXNURamDiskSize|0x00000000
