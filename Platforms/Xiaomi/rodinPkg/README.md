@@ -1,11 +1,13 @@
 # Rodin UEFI Platform
 
-Device platform for the Xiaomi Redmi K70 Ultra (`rodin`, MT6989).
+Device platform for the Xiaomi Redmi Turbo 4 (`rodin`, MT6899 / Dimensity
+8400-Ultra).
 
 `DeviceBuild.py` exposes this package to `stuart` and adds the sibling
 `UniXNU/package` directory to the EDK II package search path. The platform
-uses reviewed MT6989 paths; inactive inherited constants do not establish
-support for their original hardware targets.
+inherits reviewed MT6989/MT6899-generation paths from the rothko package; the
+board values below were re-derived from live rodin hardware on 2026-11-14
+(docs/device-proc-iomem.txt in UniXNU-rodin, /proc/device-tree, stock DTBO).
 
 ## Platform components
 
@@ -13,15 +15,22 @@ support for their original hardware targets.
   UniXNU application, registrar and initrd block driver.
 - `rodin.dsc` and `rodin.fdf` build the 2 MiB firmware volume at
   `0x40400000`.
-- `Drivers/RodinDisplayDxe` publishes the board display and the active CMD
-  framebuffer path.
-- `Drivers/RodinHighMemDxe` publishes the MT6989 high-memory ranges.
-- `Drivers/RodinWatchdogDxe` handles the board watchdog.
-- `Drivers/MtkUfsDxe` provides the bounded MT6989 UFS transport.
-- `Library/MemoryMapLib` maps the live LK mblock free extents while excluding
-  UEFI, BootShim, DTB and initrd ranges.
+- `Drivers/RodinDisplayDxe` publishes the board display. Rodin's panel is
+  `o10_42_02_0a_dsc_vdo_lcm_drv` (DSC + DSI video mode), so the GOP sits on the
+  LK framebuffer (`0xFCC20000`, size `0x33D0000`) that the panel keeps
+  scanning; the command-mode frame push validates itself at runtime and stays
+  off on this board. No display register writes are performed.
+- `Drivers/RodinHighMemDxe` publishes the 12 GiB high-memory ranges.
+- `Drivers/RodinWatchdogDxe` handles the board watchdog (`0x1C00B000`).
+- `Drivers/MtkUfsDxe` provides the bounded MT6989-generation UFS transport
+  (`0x112b0000` HCI / `0x112a0000` PHY, identical to rothko's live values).
+- `Library/MemoryMapLib` maps the live /proc/iomem free extents below
+  `0xC0000000`, keeps LK's DTB (`0x47C80000`), pstore (`0x48080000`) and the
+  LK initrd handoff (`0x66F00000`, 93 MiB) carved out, and excludes every
+  stock top-level reserved span.
 - `Library/KeypadDeviceLib` and `Library/GpioImplLib` provide the three-key
-  physical input route.
+  physical input route (Volume Up via PMIC GPIO 196, Power/Down via MT6363
+  PWRKEY/HOMEKEY).
 
 ## UFS policy
 
