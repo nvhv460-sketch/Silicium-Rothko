@@ -5645,6 +5645,46 @@
 
 ---
 
+<details>
+<summary><b><strong>Xiaomi Devices</strong></b></summary>
+
+## Xiaomi Redmi Turbo 4
+
+**State:** Active <br>
+**Codename:** rodin
+
+**Contributors:** [nvhv460-sketch](https://github.com/nvhv460-sketch/)
+
+### UEFI Status
+
+| Feature            | Description | State |
+|:-------------------|:------------|:-----:|
+| Display            | First port, untested | ❔    |
+| Internal Storage   | UFS HCI 0x112b0000, rothko-derived | ❔    |
+| Side Buttons       | Volume Up GPIO 196, power key via PMIF | ❔    |
+| USB Host Mode      |             | ❔    |
+| USB Device Mode    |             | ❔    |
+| USB Power Delivery |             | ❔    |
+| SD Card            | No slot     | ❌    |
+| Windows Boot       |             | ❌    |
+| Linux Boot         |             | ❌    |
+
+### OS Status
+
+<table>
+<tr><th>iPadOS (UniXNU)</th></tr>
+<tr><td>
+
+> [!IMPORTANT]
+> First-boot bring-up. The matching device repository is UniXNU-rodin.
+
+</td></tr>
+</table>
+
+</details>
+
+---
+
 </details>
 
 </details>
