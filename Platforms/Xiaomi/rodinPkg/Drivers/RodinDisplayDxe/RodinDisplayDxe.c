@@ -1,4 +1,4 @@
-#include <Library/RothkoStage.h>
+#include "RodinStage.h"
 /** @file
   MT6989 (rodin, Redmi K70 Ultra) display bring-up: inherit LK's scanout and
   push command-mode frames, following the approach validated on dali (MT6991).
@@ -1432,7 +1432,7 @@ RodinDisplayEntry (
   }
 #endif
 
-  RothkoStage (13);
+  RodinStage (13);
   Status = ReadDeviceTree ();
   if (EFI_ERROR (Status)) {
     if (Status == EFI_NOT_FOUND) {
@@ -1465,7 +1465,7 @@ RodinDisplayEntry (
   // Register the carveout with the debug console library before touching it,
   // so DEBUG text has somewhere to go.
   //
-  RothkoStage (14);
+  RodinStage (14);
   ProbeScanouts ();
   DEBUG ((DEBUG_WARN, "ROTHKO: %u validated scanout layer(s)\n", mScanoutCount));
 
@@ -1520,7 +1520,7 @@ RodinDisplayEntry (
       ));
   }
 
-  RothkoStage (15);
+  RodinStage (15);
   Status = InstallGop (ImageHandle);
   if (EFI_ERROR (Status)) {
     DEBUG ((DEBUG_ERROR, "ROTHKO: GOP install failed %r\n", Status));
@@ -1576,7 +1576,7 @@ RodinDisplayEntry (
     mDirty = TRUE;
   }
 
-  RothkoStage (16);
+  RodinStage (16);
   Status = StartRefresh ();
   if (EFI_ERROR (Status)) {
     //
@@ -1588,6 +1588,6 @@ RodinDisplayEntry (
     ROTHKO_HALT (5);
   }
 
-  RothkoStage (17);
+  RodinStage (17);
   return EFI_SUCCESS;
 }
